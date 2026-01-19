@@ -131,7 +131,7 @@
         <p>© 2025 YkApp</p>
     </footer>
 
-    <!-- OAuth Handler with Storage Fallback -->
+    <!-- OAuth Handler - URL Redirect Method -->
     <script>
         (function () {
             const urlParams = new URLSearchParams(window.location.search);
@@ -147,37 +147,44 @@
                 if (error) {
                     content.innerHTML = `<div style="color:#dc3545;font-size:48px">❌</div><h2>Error</h2><p>${error}</p>`;
                 } else if (code) {
-                    // Try postMessage first
-                    let messageSent = false;
-                    if (window.opener && !window.opener.closed) {
-                        try {
-                            window.opener.postMessage({
-                                type: 'ETSY_OAUTH_CODE',
-                                code: code,
-                                state: state
-                            }, '*');
-                            messageSent = true;
-                            console.log('✅ Code sent via postMessage');
-                        } catch (e) {
-                            console.error('❌ postMessage failed:', e);
-                        }
-                    }
-
-                    // Fallback: Show code to copy
+                    // Show success message
                     content.innerHTML = `
-                    <div style="color:#28a745;font-size:64px">✅</div>
-                    <h2>Success!</h2>
-                    <p>${messageSent ? 'Code sent to extension!' : 'Please copy the code below:'}</p>
-                    <div style="background:#f5f5f5;padding:15px;border-radius:6px;margin:20px 0;word-break:break-all;font-family:monospace;font-size:12px;">
-                        ${code}
-                    </div>
-                    <p><small>Window will close in 5 seconds...</small></p>
-                `;
+                        <div style="color:#28a745;font-size:64px">✅</div>
+                        <h2>Success!</h2>
+                        <p>Redirecting to extension...</p>
+                        <div style="background:#f5f5f5;padding:15px;border-radius:6px;margin:20px 0;word-break:break-all;font-family:monospace;font-size:12px;">
+                            ${code.substring(0, 30)}...
+                        </div>
+                    `;
 
-                    // Auto close
+                    // Redirect to a special URL that extension can intercept
                     setTimeout(() => {
-                        window.close();
-                    }, 5000);
+                        // Try to redirect to extension URL with code
+                        const extensionUrl = `chrome-extension://oauth-callback#code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`;
+
+                        // Also show manual instructions
+                        content.innerHTML = `
+                            <div style="color:#28a745;font-size:64px">✅</div>
+                            <h2>Almost Done!</h2>
+                            <p>Please copy this code:</p>
+                            <div style="background:#f5f5f5;padding:15px;border-radius:6px;margin:20px 0;word-break:break-all;font-family:monospace;font-size:14px;cursor:pointer;" onclick="navigator.clipboard.writeText('${code}').then(() => alert('Copied!'))">
+                                ${code}
+                            </div>
+                            <p><strong>Then:</strong></p>
+                            <ol style="text-align:left;margin:20px auto;max-width:400px;">
+                                <li>Go back to extension popup</li>
+                                <li>Click "Etsy'ye Bağlan" again</li>
+                                <li>Or paste code in console:
+                                    <div style="background:#f5f5f5;padding:10px;margin:10px 0;font-family:monospace;font-size:11px;">
+                                        chrome.storage.local.set({oauth_code: '${code}'})
+                                    </div>
+                                </li>
+                            </ol>
+                            <button onclick="navigator.clipboard.writeText('${code}').then(() => alert('Code copied!'))" style="background:#667eea;color:white;border:none;padding:12px 24px;border-radius:6px;cursor:pointer;margin:10px;">
+                                📋 Copy Code
+                            </button>
+                        `;
+                    }, 1000);
                 }
             }
         })();
