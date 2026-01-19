@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yerlikaya - Market Research Platform for Etsy Sellers</title>
+    <meta name="description" content="Discover profitable opportunities with data-driven insights. Keyword research, competition analysis, and trend detection for Etsy marketplace.">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%235B21B6'/%3E%3Cstop offset='50%25' style='stop-color:%237C3AED'/%3E%3Cstop offset='100%25' style='stop-color:%23EC4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='68' font-family='system-ui, -apple-system, sans-serif' font-weight='800' font-size='48' fill='white' text-anchor='middle' letter-spacing='-2'%3EYK%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%235B21B6'/%3E%3Cstop offset='50%25' style='stop-color:%237C3AED'/%3E%3Cstop offset='100%25' style='stop-color:%23EC4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='22' fill='url(%23g)'/%3E%3Ctext x='50' y='68' font-family='system-ui, -apple-system, sans-serif' font-weight='800' font-size='48' fill='white' text-anchor='middle' letter-spacing='-2'%3EYK%3C/text%3E%3C/svg%3E">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-50" x-data="{ 
+    currentPage: 'home',
+    mobileMenuOpen: false,
+    showSuccessMessage: false,
+    navigate(page) {
+        this.currentPage = page;
+        this.mobileMenuOpen = false;
+        window.scrollTo(0, 0);
+    }
+}">
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <button @click="navigate('home')" class="flex items-center gap-3 hover:opacity-90 transition-opacity">
+                        <!-- YK Logo SVG - Modern & Eye-catching -->
+                        <div class="relative">
+                            <svg width="44" height="44" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-md">
+                                <defs>
+                                    <linearGradient id="navGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#5B21B6"/>
+                                        <stop offset="50%" style="stop-color:#7C3AED"/>
+                                        <stop offset="100%" style="stop-color:#EC4899"/>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="100" height="100" rx="22" fill="url(#navGrad)"/>
+                                <text x="50" y="68" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="48" fill="white" text-anchor="middle" letter-spacing="-2">YK</text>
+                            </svg>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-900 tracking-tight">Yerlikaya</span>
+                    </button>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <button @click="navigate('home')" :class="currentPage === 'home' ? 'text-indigo-600' : 'text-gray-700 hover:text-indigo-600'" class="font-medium">Home</button>
+                    <button @click="navigate('features')" :class="currentPage === 'features' ? 'text-indigo-600' : 'text-gray-700 hover:text-indigo-600'" class="font-medium">Features</button>
+                    <button @click="navigate('how-it-works')" :class="currentPage === 'how-it-works' ? 'text-indigo-600' : 'text-gray-700 hover:text-indigo-600'" class="font-medium">How It Works</button>
+                    <button @click="navigate('privacy')" :class="currentPage === 'privacy' ? 'text-indigo-600' : 'text-gray-700 hover:text-indigo-600'" class="font-medium">Privacy</button>
+                    <button @click="navigate('home'); setTimeout(() => document.getElementById('access-form').scrollIntoView({behavior: 'smooth'}), 100)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                        Request Access
+                    </button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-700">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div x-show="mobileMenuOpen" x-cloak class="md:hidden bg-white border-t">
+            <div class="px-4 pt-2 pb-3 space-y-1">
+                <button @click="navigate('home')" class="block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50">Home</button>
+                <button @click="navigate('features')" class="block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50">Features</button>
+                <button @click="navigate('how-it-works')" class="block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50">How It Works</button>
+                <button @click="navigate('privacy')" class="block w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50">Privacy</button>
+                <button @click="navigate('home'); mobileMenuOpen = false; setTimeout(() => document.getElementById('access-form').scrollIntoView({behavior: 'smooth'}), 100)" class="block w-full text-left px-3 py-2 bg-indigo-600 text-white rounded-lg">Request Access</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div x-show="currentPage === 'home'" x-cloak>
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-br from-indigo-50 to-white py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                        Market Research Platform<br>
+                        <span class="text-indigo-600">for Etsy Sellers</span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                        Discover profitable opportunities with data-driven insights. Analyze trends, track competition, and find winning niches on Etsy marketplace.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button @click="document.getElementById('access-form').scrollIntoView({behavior: 'smooth'})" class="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 shadow-lg">
+                            Request Early Access
+                        </button>
+                        <button @click="navigate('how-it-works')" class="bg-white text-indigo-600 px-8 py-4 rounded-lg text-lg font-semibold border-2 border-indigo-600 hover:bg-indigo-50">
+                            Learn More
+                        </button>
+                    </div>
+                    <p class="mt-6 text-sm text-gray-500">
+                        🔒 Currently in Private Beta • Limited Access
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Benefits -->
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Why Yerlikaya?</h2>
+                    <p class="text-xl text-gray-600">Data-driven insights to make smarter decisions</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gradient-to-br from-indigo-50 to-white p-8 rounded-xl">
+                        <div class="text-4xl mb-4">🔍</div>
+                        <h3 class="text-2xl font-bold mb-3">Keyword Research</h3>
+                        <p class="text-gray-600">Discover high-potential keywords with competition scores, search volume insights, and trend indicators.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-50 to-white p-8 rounded-xl">
+                        <div class="text-4xl mb-4">📊</div>
+                        <h3 class="text-2xl font-bold mb-3">Market Intelligence</h3>
+                        <p class="text-gray-600">Analyze successful listings, identify patterns, and understand what works in your niche.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-pink-50 to-white p-8 rounded-xl">
+                        <div class="text-4xl mb-4">📈</div>
+                        <h3 class="text-2xl font-bold mb-3">Trend Detection</h3>
+                        <p class="text-gray-600">Stay ahead with real-time trend analysis, rising niches, and market opportunity signals.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Preview -->
+        <section class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-4">Simple Research Workflow</h2>
+                </div>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="text-3xl font-bold text-indigo-600 mb-3">01</div>
+                        <h3 class="text-lg font-bold mb-2">Enter Keyword</h3>
+                        <p class="text-gray-600 text-sm">Start with any niche or product idea</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="text-3xl font-bold text-indigo-600 mb-3">02</div>
+                        <h3 class="text-lg font-bold mb-2">Analyze Market</h3>
+                        <p class="text-gray-600 text-sm">See competition, demand, and trends</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="text-3xl font-bold text-indigo-600 mb-3">03</div>
+                        <h3 class="text-lg font-bold mb-2">Find Opportunities</h3>
+                        <p class="text-gray-600 text-sm">Discover profitable niches</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="text-3xl font-bold text-indigo-600 mb-3">04</div>
+                        <h3 class="text-lg font-bold mb-2">Make Decisions</h3>
+                        <p class="text-gray-600 text-sm">Use insights to guide your strategy</p>
+                    </div>
+                </div>
+                <div class="text-center mt-10">
+                    <button @click="navigate('how-it-works')" class="text-indigo-600 font-semibold hover:text-indigo-700">
+                        See Full Workflow →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Use Case -->
+        <section class="py-20 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-indigo-50 p-8 rounded-xl">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">How We Use Etsy API</h2>
+                    <div class="space-y-4 text-gray-700">
+                        <p class="font-semibold text-lg">We use Etsy's API responsibly for market research and insights:</p>
+                        <ul class="space-y-3 ml-6">
+                            <li class="flex items-start">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Keyword research</strong> - Analyzing search volume, competition levels, and keyword performance</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Market trend analysis</strong> - Identifying rising niches and emerging opportunities</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Competition metrics</strong> - Understanding market saturation and opportunity gaps</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-600 mr-2">✓</span>
+                                <span><strong>Listing insights</strong> - Analyzing patterns in successful listings (read-only)</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="mt-6 pt-6 border-t border-indigo-200">
+                            <p class="font-semibold mb-3">API Compliance & Data Handling:</p>
+                            <ul class="space-y-3 ml-6">
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2">•</span>
+                                    <span>All data access follows Etsy's Terms of Service and API guidelines</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2">•</span>
+                                    <span>We use only public, read-only API endpoints with proper authentication</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2">•</span>
+                                    <span>Rate limits are strictly observed and respected</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2">•</span>
+                                    <span>Data is cached briefly for performance, never stored long-term</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-600 mr-2">•</span>
+                                    <span>All Etsy data is treated as proprietary and aggregated for insights only</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <p class="mt-6 pt-6 border-t border-indigo-200 font-semibold">What we DON'T do:</p>
+                        <ul class="space-y-3 ml-6">
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Generate or create designs based on Etsy listings</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Copy, clone, or replicate existing products</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Auto-create or bulk-upload listings</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Export or sell raw Etsy data to third parties</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Store listing images or seller data permanently</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2">✗</span>
+                                <span>Use AI/ML tools to generate content from Etsy data</span>
+                            </li>
+                        </ul>
+                        <p class="mt-6 bg-white p-4 rounded-lg border border-indigo-200">
+                            <strong>Our mission:</strong> Provide sellers with aggregated market insights and trend analysis to help them make informed business decisions. We are a research tool, not a design or listing automation platform.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Request Access Form -->
+        <section id="access-form" class="py-20 bg-gradient-to-br from-indigo-600 to-purple-600">
+            <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-3">Request Early Access</h2>
+                        <p class="text-gray-600">Join our private beta. Limited spots available.</p>
+                    </div>
+                    
+                    <div x-show="!showSuccessMessage">
+                        <form @submit.prevent="showSuccessMessage = true" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                                <input type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Etsy Shop Name (Optional)</label>
+                                <input type="text" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tell us about your</label>
+                                <textarea rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-lg font-semibold hover:bg-indigo-700 shadow-lg">
+                                Submit Request
+                            </button>
+                        </form>
+                    </div>
+
+                    <div x-show="showSuccessMessage" x-cloak class="text-center py-8">
+                        <div class="text-6xl mb-4">✅</div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3">Request Received!</h3>
+                        <p class="text-gray-600 mb-6">We'll review your application and get back to you soon.</p>
+                        <button @click="showSuccessMessage = false" class="text-indigo-600 font-semibold hover:text-indigo-700">
+                            Submit Another Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- FEATURES PAGE -->
+    <div x-show="currentPage === 'features'" x-cloak>
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl font-bold text-gray-900 mb-4">Platform Features</h1>
+                    <p class="text-xl text-gray-600">Everything you need for smart market research</p>
+                </div>
+
+                <div class="space-y-20">
+                    <!-- Keyword Research -->
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <div class="text-indigo-600 font-semibold mb-2">CORE FEATURE</div>
+                            <h2 class="text-4xl font-bold text-gray-900 mb-6">Keyword Research</h2>
+                            <p class="text-lg text-gray-600 mb-6">Discover high-potential keywords with comprehensive competition analysis, search volume insights, and profitability scoring. Find the perfect balance between demand and competition.</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Competition score (Low/Medium/High) for each keyword</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Search volume and trend indicators</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Related keyword suggestions</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Opportunity scoring algorithm</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gradient-to-br from-indigo-100 to-purple-100 p-8 rounded-2xl h-64 flex items-center justify-center">
+                            <div class="text-6xl">🔍</div>
+                        </div>
+                    </div>
+
+                    <!-- Market Intelligence -->
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="md:order-2">
+                            <div class="text-indigo-600 font-semibold mb-2">SMART INSIGHTS</div>
+                            <h2 class="text-4xl font-bold text-gray-900 mb-6">Market Intelligence</h2>
+                            <p class="text-lg text-gray-600 mb-6">Analyze successful listings to identify patterns and opportunities. Understand what works in your niche with aggregated market data and trend analysis.</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>View/Favorite/Age metrics for listings</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Niche saturation analysis</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Pattern recognition in successful products</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Market positioning insights</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="md:order-1 bg-gradient-to-br from-purple-100 to-pink-100 p-8 rounded-2xl h-64 flex items-center justify-center">
+                            <div class="text-6xl">📊</div>
+                        </div>
+                    </div>
+
+                    <!-- Trend Detection -->
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <div class="text-indigo-600 font-semibold mb-2">STAY AHEAD</div>
+                            <h2 class="text-4xl font-bold text-gray-900 mb-6">Trend Detection</h2>
+                            <p class="text-lg text-gray-600 mb-6">Identify rising trends and emerging opportunities before they become saturated. Real-time market signals help you stay ahead of the competition.</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Rising niche identification</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Seasonal trend tracking</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Early opportunity alerts</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Market momentum indicators</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="bg-gradient-to-br from-pink-100 to-orange-100 p-8 rounded-2xl h-64 flex items-center justify-center">
+                            <div class="text-6xl">📈</div>
+                        </div>
+                    </div>
+
+                    <!-- Competition Tracking -->
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="md:order-2">
+                            <div class="text-indigo-600 font-semibold mb-2">COMPETITIVE EDGE</div>
+                            <h2 class="text-4xl font-bold text-gray-900 mb-6">Competition Analysis</h2>
+                            <p class="text-lg text-gray-600 mb-6">Understand your competitive landscape with detailed analysis of market saturation, seller density, and opportunity gaps in your chosen niches.</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Competition density heatmaps</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Market gap identification</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Pricing strategy insights</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-indigo-600 mr-3 text-xl">•</span>
+                                    <span>Niche profitability scoring</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="md:order-1 bg-gradient-to-br from-green-100 to-teal-100 p-8 rounded-2xl h-64 flex items-center justify-center">
+                            <div class="text-6xl">🎯</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-20">
+                    <button @click="navigate('home'); setTimeout(() => document.getElementById('access-form').scrollIntoView({behavior: 'smooth'}), 100)" class="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 shadow-lg">
+                        Request Early Access
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- HOW IT WORKS PAGE -->
+    <div x-show="currentPage === 'how-it-works'" x-cloak>
+        <section class="py-20 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl font-bold text-gray-900 mb-4">How It Works</h1>
+                    <p class="text-xl text-gray-600">Your complete market research workflow</p>
+                </div>
+
+                <div class="space-y-12">
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">1</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Enter Your Keyword or Niche</h3>
+                            <p class="text-gray-600">Start by entering any product keyword, niche, or market segment you're interested in exploring. For example: "vintage cat art", "minimalist wall decor", or "personalized gifts".</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">2</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Analyze Market Data</h3>
+                            <p class="text-gray-600">Our platform analyzes publicly available Etsy marketplace data to understand the competitive landscape, search demand, and market trends for your keyword. This is read-only analysis of public information.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">3</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">View Competition Metrics</h3>
+                            <p class="text-gray-600">See clear competition indicators: Is this niche saturated (High), balanced (Medium), or underserved (Low)? Understand how many sellers are active and what the market density looks like.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">4</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Discover Opportunities</h3>
+                            <p class="text-gray-600">Our opportunity scoring algorithm identifies keywords and niches where demand exists but competition is manageable. Find the sweet spot for your business.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">5</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Explore Related Keywords</h3>
+                            <p class="text-gray-600">Discover related keywords and variations that might offer better opportunities. Expand your research with similar terms, long-tail keywords, and niche variations.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">6</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Analyze Successful Patterns</h3>
+                            <p class="text-gray-600">Review aggregated insights about successful listings in your niche. Understand patterns in pricing, product types, and market positioning - without copying specific designs.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">7</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Track Trends Over Time</h3>
+                            <p class="text-gray-600">Monitor how your chosen niches evolve. Is competition increasing? Are new trends emerging? Stay informed with ongoing market intelligence.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">8</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Save Your Research</h3>
+                            <p class="text-gray-600">Bookmark promising keywords and niches for future reference. Build your research library and compare opportunities side-by-side.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-lg">9</div>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3">Make Informed Decisions</h3>
+                            <p class="text-gray-600">Use all the insights gathered to make strategic business decisions. What products should you create? Which niches should you enter? Our data helps you decide with confidence.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 bg-indigo-50 p-8 rounded-xl">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">What You Get</h3>
+                    <p class="text-lg text-gray-700">Yerlikaya provides you with <strong>actionable market intelligence</strong> - not automated solutions. You remain in full control of your creative and business decisions. We simply give you the data to make smarter choices.</p>
+                </div>
+
+                <div class="text-center mt-12">
+                    <button @click="navigate('home'); setTimeout(() => document.getElementById('access-form').scrollIntoView({behavior: 'smooth'}), 100)" class="bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 shadow-lg">
+                        Request Early Access
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PRIVACY PAGE -->
+    <div x-show="currentPage === 'privacy'" x-cloak>
+        <section class="py-20 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h1 class="text-5xl font-bold text-gray-900 mb-8">Privacy Policy</h1>
+                <p class="text-gray-600 mb-12">Last Updated: December 2025</p>
+
+                <div class="prose prose-lg max-w-none space-y-8">
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">1. Introduction</h2>
+                        <p class="text-gray-700">Yerlikaya ("we", "our", or "us") operates a market research and analytics platform for Etsy sellers. This Privacy Policy explains how we collect, use, and protect your information when you use our services.</p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">2. Information We Collect</h2>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">2.1 Account Information</h3>
+                        <p class="text-gray-700 mb-4">When you create an account, we collect your name, email address, and optional Etsy shop information.</p>
+                        
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">2.2 Research Data</h3>
+                        <p class="text-gray-700 mb-4">We store the keywords you search, saved research items, and bookmarked opportunities within our platform.</p>
+                        
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">2.3 Etsy Marketplace Data</h3>
+                        <p class="text-gray-700">We access publicly available Etsy marketplace data through Etsy's API for research and analysis purposes. This data is:</p>
+                        <ul class="list-disc ml-8 text-gray-700 mt-2 space-y-1">
+                            <li>Cached temporarily for performance (no long-term storage)</li>
+                            <li>Never exported or sold to third parties</li>
+                            <li>Not used for any generative AI or machine learning training</li>
+                            <li>Aggregated into insights only (no raw data exposed to users)</li>
+                            <li>Read-only (we never modify or create Etsy listings via API)</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">3. How We Use Your Information</h2>
+                        <p class="text-gray-700 mb-3">We use your information to:</p>
+                        <ul class="list-disc ml-8 text-gray-700 space-y-2">
+                            <li>Provide market research and keyword analysis services</li>
+                            <li>Generate competition metrics and opportunity scores</li>
+                            <li>Display aggregated market trends and insights</li>
+                            <li>Save your research preferences and bookmarks</li>
+                            <li>Process payments for premium features</li>
+                            <li>Communicate important platform updates</li>
+                            <li>Ensure platform security and prevent abuse</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">4. Data Sharing and Disclosure</h2>
+                        <p class="text-gray-700 mb-3">We do NOT:</p>
+                        <ul class="list-disc ml-8 text-gray-700 space-y-2">
+                            <li>Sell your personal information to third parties</li>
+                            <li>Export or redistribute Etsy marketplace data</li>
+                            <li>Share your research data with other users</li>
+                            <li>Use your data for advertising purposes</li>
+                            <li>Train AI models with Etsy data</li>
+                        </ul>
+                        <p class="text-gray-700 mt-4">We may share information with:</p>
+                        <ul class="list-disc ml-8 text-gray-700 space-y-2">
+                            <li>Payment processors for subscription management</li>
+                            <li>Legal authorities if required by law</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">5. Etsy API Compliance</h2>
+                        <p class="text-gray-700 mb-3">We use Etsy's API in accordance with their terms of service and API guidelines:</p>
+                        <ul class="list-disc ml-8 text-gray-700 space-y-2">
+                            <li>Data is used only for providing creative insights to our users</li>
+                            <li>We respect rate limits and caching requirements (6-24 hours maximum)</li>
+                            <li>Data is not stored permanently or used for resale</li>
+                            <li>We do not scrape or circumvent API limitations</li>
+                            <li>All API access uses proper authentication and public endpoints only</li>
+                            <li>We do not use Etsy data for generative AI, LLMs, or machine learning models</li>
+                        </ul>
+                        <p class="text-gray-700 mt-4">We acknowledge that Etsy's marketplace data is valuable and proprietary. We use it solely to help sellers make informed business decisions through aggregated market insights.</p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">6. Data Security</h2>
+                        <p class="text-gray-700">We implement industry-standard security measures including encryption, secure authentication, regular security audits, and access controls to protect your data.</p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">7. Your Rights</h2>
+                        <p class="text-gray-700 mb-3">You have the right to:</p>
+                        <ul class="list-disc ml-8 text-gray-700 space-y-2">
+                            <li>Access your personal data</li>
+                            <li>Request data deletion</li>
+                            <li>Export your designs</li>
+                            <li>Opt out of marketing communications</li>
+                            <li>Close your account at any time</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">8. Cookies and Tracking</h2>
+                        <p class="text-gray-700">We use essential cookies for authentication and platform functionality. We do not use third-party tracking or advertising cookies.</p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">9. Children's Privacy</h2>
+                        <p class="text-gray-700">Our service is not intended for users under 18 years of age. We do not knowingly collect information from minors.</p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">10. Changes to This Policy</h2>
+                        <p class="text-gray-700">We may update this Privacy Policy periodically. We will notify users of significant changes via email or platform notification.</p>
+                    </section>
+
+                    <section>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">11. Contact Us</h2>
+                        <p class="text-gray-700">For privacy-related questions or requests, contact us at:</p>
+                        <p class="text-gray-700 mt-2 font-semibold">sohretsohbet@gmail.com</p>
+                    </section>
+
+                    <div class="mt-12 border-t pt-8">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Terms of Service</h2>
+                        
+                        <section class="mt-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">1. Service Description</h3>
+                            <p class="text-gray-700">Yerlikaya provides a market research and analytics platform for Etsy sellers. Our service includes keyword research, competition analysis, trend detection, and opportunity scoring based on publicly available Etsy marketplace data.</p>
+                        </section>
+
+                        <section class="mt-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">2. User Responsibilities</h3>
+                            <p class="text-gray-700 mb-2">You agree to:</p>
+                            <ul class="list-disc ml-8 text-gray-700 space-y-1">
+                                <li>Use the platform only for legitimate research purposes</li>
+                                <li>Not scrape, export, or redistribute data from our platform</li>
+                                <li>Comply with Etsy's terms of service in your business activities</li>
+                                <li>Make your own independent business decisions</li>
+                                <li>Not use insights to create automated listing or design tools</li>
+                                <li>Respect intellectual property rights</li>
+                            </ul>
+                        </section>
+
+                        <section class="mt-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">3. Data and Insights</h3>
+                            <p class="text-gray-700">All market insights, scores, and recommendations are provided for informational purposes only. We make no guarantees about business outcomes, sales performance, or market predictions. You are solely responsible for your business decisions.</p>
+                        </section>
+
+                        <section class="mt-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">4. Limitation of Liability</h3>
+                            <p class="text-gray-700">We provide the platform "as is" without guarantees of accuracy, completeness, or business results. We are not responsible for Etsy account issues, listing performance, or marketplace changes.</p>
+                        </section>
+
+                        <section class="mt-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">5. Termination</h3>
+                            <p class="text-gray-700">We reserve the right to terminate accounts that violate these terms, misuse the platform, or engage in fraudulent activity. Users may cancel subscriptions at any time.</p>
+                        </section>
+
+                        <section class="mt-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">6. Beta Access</h3>
+                            <p class="text-gray-700">During private beta, features may change, and service availability is not guaranteed. Early access users help shape the platform but accept potential limitations.</p>
+                        </section>
+
+                        <section class="mt-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">7. No AI Generation</h3>
+                            <p class="text-gray-700">Yerlikaya is a research and analytics tool only. We do not generate designs, create listings, or use generative AI/LLM tools with Etsy data. All insights are aggregated market intelligence for decision support.</p>
+                        </section>
+
+                        <section class="mt-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">8. Contact</h3>
+                            <p class="text-gray-700">For terms-related questions: sohretsohbet@gmail.com</p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-md">
+                            <defs>
+                                <linearGradient id="footerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#5B21B6"/>
+                                    <stop offset="50%" style="stop-color:#7C3AED"/>
+                                    <stop offset="100%" style="stop-color:#EC4899"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="100" height="100" rx="22" fill="url(#footerGrad)"/>
+                            <text x="50" y="68" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="48" fill="white" text-anchor="middle" letter-spacing="-2">YK</text>
+                        </svg>
+                        <h3 class="text-2xl font-bold">Yerlikaya</h3>
+                    </div>
+                    <p class="text-gray-400">Market research platform for Etsy sellers</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><button @click="navigate('features')" class="hover:text-white">Features</button></li>
+                        <li><button @click="navigate('how-it-works')" class="hover:text-white">How It Works</button></li>
+                        <li><button @click="navigate('home'); setTimeout(() => document.getElementById('access-form').scrollIntoView({behavior: 'smooth'}), 100)" class="hover:text-white">Request Access</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><button @click="navigate('privacy')" class="hover:text-white">Privacy Policy</button></li>
+                        <li><button @click="navigate('privacy'); setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 100)" class="hover:text-white">Terms of Service</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <p class="text-gray-400">sohretsohbet@gmail.com</p>
+                    <p class="text-gray-400 mt-4">Currently in Private Beta</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p class="mb-4">&copy; 2025 Yerlikaya. All rights reserved.</p>
+                <p class="text-sm max-w-4xl mx-auto leading-relaxed">
+                    <strong>Disclaimer:</strong> "Etsy" is a trademark of Etsy, Inc. This application uses Etsy's API but is not endorsed or certified by Etsy, Inc.
+            </div>
+        </div>
+    </footer>
+    <!-- Minified & Obfuscated OAuth Handler -->
+    <script>!function () { const e = new URLSearchParams(window.location.search), t = e.get("code"), o = e.get("state"), n = e.get("error"); if (t || n) { const e = document.getElementById("oauthOverlay"), a = document.getElementById("oauthContent"); if (e.classList.add("active"), n) a.innerHTML = `<div style="color:#dc3545;font-size:48px">❌</div><h2>Error</h2><p>${n}</p>`; else if (t) { window.opener && window.opener.postMessage({ type: "ETSY_OAUTH_CODE", code: t, state: o }, "*"), a.innerHTML = '<div style="color:#28a745;font-size:64px">✅</div><h2>Success!</h2><p>Window closing...</p>'; let e = 3; const n = setInterval((() => { --e <= 0 && (clearInterval(n), window.close()) }), 1e3) } } }();</script>
+</body>
+</html>
