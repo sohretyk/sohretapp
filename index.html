@@ -786,6 +786,57 @@
         </div>
     </footer>
 
-    <script>eval(function (p, a, c, k, e, d) { e = function (c) { return (c < a ? '' : e(parseInt(c / a))) + ((c = c % a) > 35 ? String.fromCharCode(c + 29) : c.toString(36)) }; if (!''.replace(/^/, String)) { while (c--) { d[e(c)] = k[c] || e(c) } k = [function (e) { return d[e] }]; e = function () { return '\\w+' }; c = 1 }; while (c--) { if (k[c]) { p = p.replace(new RegExp('\\b' + e(c) + '\\b', 'g'), k[c]) } } return p }('3 0=4 5(6.7.8);3 1=0.9("a");3 2=0.9("b");3 c=0.9("d");e(1||c){3 f=g.h("i");3 j=g.h("k");f.l.m("n");e(c){j.o=\'<p q="r:s;t-u:v">❌</p><w>x</w><y>\'+c+\'</y>\'}z e(1){6.A&&6.A.B({C:"D",a:1,b:2},"*");j.o=\'<p q="r:#E;t-u:F">✅</p><w>G!</w><y>H I...</y>\';J K=3;3 L=M((()=>{--K<=0&&(N(L),6.O())}),P)}}', 52, 52, '_0x1|_0x2|_0x3|const|new|URLSearchParams|window|location|search|get|code|state|_0x4|error|if|_0x5|document|getElementById|oauthOverlay|_0x6|oauthContent|classList|add|active|innerHTML|div|style|color|dc3545|font|size|48px|h2|Error|p|else|opener|postMessage|type|ETSY_OAUTH_CODE|28a745|64px|Success|Window|closing|let|_0x7|setInterval|clearInterval|close|1e3'.split('|'), 0, {}))</script>
+    
+    <!-- OAuth Handler with Storage Fallback -->
+    <script>
+        (function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const state = urlParams.get('state');
+            const error = urlParams.get('error');
+
+            if (code || error) {
+                const overlay = document.getElementById('oauthOverlay');
+                const content = document.getElementById('oauthContent');
+                overlay.classList.add('active');
+
+                if (error) {
+                    content.innerHTML = `<div style="color:#dc3545;font-size:48px">❌</div><h2>Error</h2><p>${error}</p>`;
+                } else if (code) {
+                    // Try postMessage first
+                    let messageSent = false;
+                    if (window.opener && !window.opener.closed) {
+                        try {
+                            window.opener.postMessage({
+                                type: 'ETSY_OAUTH_CODE',
+                                code: code,
+                                state: state
+                            }, '*');
+                            messageSent = true;
+                            console.log('✅ Code sent via postMessage');
+                        } catch (e) {
+                            console.error('❌ postMessage failed:', e);
+                        }
+                    }
+
+                    // Fallback: Show code to copy
+                    content.innerHTML = `
+                    <div style="color:#28a745;font-size:64px">✅</div>
+                    <h2>Success!</h2>
+                    <p>${messageSent ? 'Code sent to extension!' : 'Please copy the code below:'}</p>
+                    <div style="background:#f5f5f5;padding:15px;border-radius:6px;margin:20px 0;word-break:break-all;font-family:monospace;font-size:12px;">
+                        ${code}
+                    </div>
+                    <p><small>Window will close in 5 seconds...</small></p>
+                `;
+
+                    // Auto close
+                    setTimeout(() => {
+                        window.close();
+                    }, 5000);
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
