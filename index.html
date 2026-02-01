@@ -1,131 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YkApp - Etsy Tag Research Tool</title>
+    <title>Etsy OAuth - Code</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        #oauthOverlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #oauthOverlay.active {
+            min-height: 100vh;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-
-        .oauth-container {
+        .container {
             background: white;
-            padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            text-align: center;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+        h1 {
+            color: #f56400;
+            margin-bottom: 10px;
+            font-size: 28px;
         }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        .success {
+            color: #28a745;
+            font-size: 18px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-
-        header {
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .step h2 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .code-box {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin-bottom: 15px;
+            border: 2px solid #4a5568;
+        }
+        .copy-btn {
             background: #f56400;
             color: white;
-            padding: 2rem;
-            text-align: center;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+        .copy-btn:hover {
+            background: #d45500;
         }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+        .copy-btn:active {
+            transform: scale(0.98);
         }
-
-        h2 {
-            color: #f56400;
-            margin: 1.5rem 0 1rem;
+        .copied {
+            background: #28a745 !important;
         }
-
-        footer {
-            background: #333;
-            color: white;
-            padding: 2rem;
-            text-align: center;
-            margin-top: 3rem;
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #2196f3;
+            margin-top: 20px;
+        }
+        .info p {
+            color: #1565c0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .error {
+            background: #ffebee;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #f44336;
+        }
+        .error h2 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+        .error p {
+            color: #d32f2f;
         }
     </style>
 </head>
-
 <body>
-    <div id="oauthOverlay">
-        <div class="oauth-container">
-            <div id="oauthContent">
-                <div class="spinner"></div>
-                <h2>Processing OAuth...</h2>
-            </div>
+    <div class="container">
+        <h1>🛍️ Etsy OAuth</h1>
+        <div id="content">
+            <!-- JavaScript will populate this -->
         </div>
     </div>
-
-    <header>
-        <h1>🏷️ Etsy Tag Research Tool</h1>
-        <p>Simple tool to research and analyze Etsy product tags</p>
-    </header>
-
-    <div class="container">
-        <section>
-            <h2>📊 What YkApp Does</h2>
-            <p>YkApp is a basic research tool that helps Etsy sellers understand how tags work on successful products.
-            </p>
-        </section>
-    </div>
-
-    <footer>
-        <p><strong>YkApp</strong> - A simple research tool for Etsy sellers</p>
-        <p>© 2025 YkApp</p>
-    </footer>
-
-    <script>var _0x4e2a = ['search', 'get', 'code', 'state', 'error', 'getElementById', 'oauthOverlay', 'classList', 'add', 'active', 'oauthContent', 'innerHTML', '<div\x20style=\x22color:#dc3545;font-size:48px\x22>❌</div><h2>Error</h2><p>', '</p>', '<div\x20style=\x22color:#28a745;font-size:64px\x22>✅</div><h2>Success!</h2><p>Code\x20received!</p><div\x20style=\x22background:#f5f5f5;padding:15px;border-radius:6px;margin:20px\x200;word-break:break-all;font-family:monospace;font-size:12px;cursor:pointer\x22\x20onclick=\x22navigator.clipboard.writeText(\x27', 'substring', '\x27).then(()=>alert(\x27Copied!\x27))\x22>', '...</div><button\x20onclick=\x22navigator.clipboard.writeText(\x27', '\x27).then(()=>alert(\x27Code\x20copied!\x27))\x22\x20style=\x22background:#667eea;color:white;border:none;padding:12px\x2024px;border-radius:6px;cursor:pointer;margin:10px\x22>📋\x20Copy\x20Code</button>', 'location']; (function (_0x2d8f05, _0x4e2a70) { var _0x4d74cb = function (_0x32719f) { while (--_0x32719f) { _0x2d8f05['push'](_0x2d8f05['shift']()); } }; _0x4d74cb(++_0x4e2a70); }(_0x4e2a, 0x1f4)); var _0x4d74 = function (_0x2d8f05, _0x4e2a70) { _0x2d8f05 = _0x2d8f05 - 0x0; var _0x4d74cb = _0x4e2a[_0x2d8f05]; return _0x4d74cb; }; (function () { const _0x32719f = new URLSearchParams(window[_0x4d74('0x0')][_0x4d74('0x1')]); const _0x2d2f19 = _0x32719f[_0x4d74('0x2')](_0x4d74('0x3')); const _0x3a4c89 = _0x32719f[_0x4d74('0x2')](_0x4d74('0x4')); const _0x1f3d90 = _0x32719f[_0x4d74('0x2')](_0x4d74('0x5')); if (_0x2d2f19 || _0x1f3d90) { const _0x5c8e12 = document[_0x4d74('0x6')](_0x4d74('0x7')); const _0x3f9e21 = document[_0x4d74('0x6')](_0x4d74('0xa')); _0x5c8e12[_0x4d74('0x8')][_0x4d74('0x9')](_0x4d74('0xa')); if (_0x1f3d90) { _0x3f9e21[_0x4d74('0xb')] = _0x4d74('0xc') + _0x1f3d90 + _0x4d74('0xd'); } else if (_0x2d2f19) { _0x3f9e21[_0x4d74('0xb')] = _0x4d74('0xe') + _0x2d2f19 + _0x4d74('0xf') + _0x2d2f19[_0x4d74('0x10')](0x0, 0x1e) + _0x4d74('0x11') + _0x2d2f19 + _0x4d74('0x12'); } } })();</script>
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+        const contentDiv = document.getElementById('content');
+        if (error) {
+            // OAuth error
+            contentDiv.innerHTML = `
+                <div class="error">
+                    <h2>❌ Bağlantı Hatası</h2>
+                    <p>Etsy bağlantısı sırasında bir hata oluştu: <strong>${error}</strong></p>
+                    <p style="margin-top: 10px;">Lütfen extension'dan tekrar deneyin.</p>
+                </div>
+            `;
+        } else if (code) {
+            // Success - show code
+            contentDiv.innerHTML = `
+                <div class="success">
+                    <span style="font-size: 24px;">✅</span>
+                    <span>Etsy bağlantısı başarılı!</span>
+                </div>
+                
+                <div class="step">
+                    <h2>📋 Adım 1: Aşağıdaki kodu kopyalayın</h2>
+                    <div class="code-box" id="codeBox">${code}</div>
+                    <button class="copy-btn" id="copyBtn" onclick="copyCode()">
+                        📋 Kodu Kopyala
+                    </button>
+                </div>
+                
+                <div class="info">
+                    <p><strong>📌 Adım 2:</strong> Extension popup'ını açın</p>
+                    <p><strong>📌 Adım 3:</strong> OAuth sekmesine gidin</p>
+                    <p><strong>📌 Adım 4:</strong> "OAuth Code" alanına yapıştırın</p>
+                    <p><strong>📌 Adım 5:</strong> "✅ Token Al" butonuna tıklayın</p>
+                </div>
+            `;
+        } else {
+            // No code or error
+            contentDiv.innerHTML = `
+                <div class="error">
+                    <h2>⚠️ Geçersiz URL</h2>
+                    <p>Bu sayfa Etsy OAuth callback için kullanılır.</p>
+                    <p style="margin-top: 10px;">Lütfen extension'dan "Etsy'ye Bağlan" butonuna tıklayın.</p>
+                </div>
+            `;
+        }
+        function copyCode() {
+            const code = urlParams.get('code');
+            const btn = document.getElementById('copyBtn');
+            // Copy to clipboard
+            navigator.clipboard.writeText(code).then(() => {
+                // Visual feedback
+                btn.textContent = '✅ Kopyalandı!';
+                btn.classList.add('copied');
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    btn.textContent = '📋 Kodu Kopyala';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Kopyalama başarısız. Lütfen manuel olarak kopyalayın.');
+            });
+        }
+        // Auto-focus code box for easy manual copy
+        if (code) {
+            setTimeout(() => {
+                const codeBox = document.getElementById('codeBox');
+                if (codeBox) {
+                    codeBox.style.userSelect = 'all';
+                }
+            }, 100);
+        }
+    </script>
 </body>
-
 </html>
